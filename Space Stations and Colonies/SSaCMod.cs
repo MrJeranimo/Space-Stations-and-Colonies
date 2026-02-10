@@ -20,16 +20,13 @@ namespace Space_Stations_and_Colonies
             {
                 if (currentV != null)
                 {
-                    Part newRoot = new Part("", currentV.Parts.Root.Template);
-                    Vehicle newVehicle = Vehicle.CreateVehicle(currentV.System, currentV.Body2Cce, currentV.BodyRates, currentV.Parent, "test", newRoot, currentV.Orbit);
+                    PartTree newPartTree = currentV.Parts.Clone();
+                    Vehicle newVehicle = Vehicle.CreateVehicle(currentV.System, currentV.Body2Cce, currentV.BodyRates, currentV.Parent, $"{currentV.Id}_Clone{i}", newPartTree.Root, currentV.Orbit);
                     newVehicle.UpdatePerFrameData();
                     //newVehicle.SetName($"Copy of Vehicle {i}");
                     i++;
                     Universe.CurrentSystem!.Vehicles.Register(newVehicle);
                     DefaultCategory.Log.Info("Cloned Vehicle");
-                } else
-                {
-                    DefaultCategory.Log.Error($"Current System {currentV.System != null}, Template {(VehicleTemplate)currentV.BodyTemplate != null}, Parent {currentV.Parent != null}");
                 }
             }
         }
