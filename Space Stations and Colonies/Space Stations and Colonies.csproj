@@ -7,4 +7,43 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<Target Name="PostBuild" AfterTargets="Build">
+		<MakeDir Directories="C:/Program Files/Kitten Space Agency/Content/"></MakeDir>
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="C:/Program Files/Kitten Space Agency/Content/Space Stations and Colonies/" />
+	</Target>
+
+	<ItemGroup>
+    <PackageReference Include="ModMenu.Attributes" Version="1.0.1" />
+    <PackageReference Include="StarMap.API" Version="0.3.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Brutal.Core.Logging">
+      <HintPath>..\..\..\..\..\..\Program Files\Kitten Space Agency\Brutal.Core.Logging.dll</HintPath>
+		<Private>false</Private>
+    </Reference>
+    <Reference Include="Brutal.Core.Numerics">
+      <HintPath>..\..\..\..\..\..\Program Files\Kitten Space Agency\Brutal.Core.Numerics.dll</HintPath>
+		<Private>false</Private>
+    </Reference>
+    <Reference Include="Brutal.Core.Strings">
+      <HintPath>..\..\..\..\..\..\Program Files\Kitten Space Agency\Brutal.Core.Strings.dll</HintPath>
+		<Private>false</Private>
+    </Reference>
+    <Reference Include="Brutal.ImGui">
+      <HintPath>..\..\..\..\..\..\Program Files\Kitten Space Agency\Brutal.ImGui.dll</HintPath>
+		<Private>false</Private>
+    </Reference>
+    <Reference Include="KSA">
+      <HintPath>..\..\..\..\..\..\Program Files\Kitten Space Agency\KSA.dll</HintPath>
+		<Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="mod.toml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
