@@ -20,13 +20,18 @@ namespace Space_Stations_and_Colonies
             {
                 if (currentV != null)
                 {
+                    // Creates a true clone of the Vehicle's Part Tree
                     PartTree newPartTree = currentV.Parts.Clone();
+
+                    // Refills the tanks to full. Does NOT preserve old tank state
+                    newPartTree.RefillConsumables();
+
+                    // There is still an error copying this Vehicle, figure out why
                     Vehicle newVehicle = Vehicle.CreateVehicle(currentV.System, currentV.Body2Cce, currentV.BodyRates, currentV.Parent, $"{currentV.Id}_Clone{i}", newPartTree.Root, currentV.Orbit);
                     newVehicle.UpdatePerFrameData();
-                    //newVehicle.SetName($"Copy of Vehicle {i}");
                     i++;
                     Universe.CurrentSystem!.Vehicles.Register(newVehicle);
-                    DefaultCategory.Log.Info("Cloned Vehicle");
+                    DefaultCategory.Log.Info($"Cloned Vehicle {currentV.Id}");
                 }
             }
         }
