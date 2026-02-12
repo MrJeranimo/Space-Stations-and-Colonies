@@ -11,10 +11,24 @@ namespace Space_Stations_and_Colonies
     public class SSaCMod
     {
         public static int i = 1;
+        public static double x = 0.0;
+        public static double y = 0.0;
+        public static double z = 0.0;
 
         [ModMenuEntry("Space Stations and Colonies")]
         public static void Menu()
         {
+            ImGui.Text("Clone Offset: ");
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(150f);
+            ImGui.InputDouble("X", ref x, 0.5, 1);
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(150f);
+            ImGui.InputDouble("Y", ref y, 0.5, 1);
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(150f);
+            ImGui.InputDouble("Z", ref z, 0.5, 1);
+
             Vehicle? currentV = Program.ControlledVehicle;
             if (ImGui.Button("Clone Vehicle"))
             {
@@ -26,7 +40,6 @@ namespace Space_Stations_and_Colonies
                     // Stores the original Center of Mass and Bounding Sphere Radius before the new Part Tree is recomputed, as these values will be used to adjust the new Vehicle's position and scale after cloning
                     double3 centerOfMassAsmb = currentV.CenterOfMassAsmb;
                     float boundingSphereRadius = currentV.BoundingSphereRadius;
-                    currentV.UpdateAfterPartTreeModification();
 
                     // There is still an error copying this Vehicle, figure out why
                     Vehicle newVehicle = Vehicle.CreateVehicle(currentV.System, currentV.Body2Cce, currentV.BodyRates, currentV.Parent, $"{currentV.Id}_Clone{i}", newPartTree.Root, currentV.Orbit);
@@ -41,7 +54,9 @@ namespace Space_Stations_and_Colonies
 
                     double3 double3_2 = (newVehicle.CenterOfMassAsmb - centerOfMassAsmb).Transform(currentV.GetAsmb2Cci());
 
-                    Orbit fromStateCci1 = Orbit.CreateFromStateCci(currentV.Parent, stateVectors.StateTime, stateVectors.PositionCci + double3_2, stateVectors.VelocityCci, currentV.OrbitColor);
+                    double3 test = new double3(x, y, z);
+
+                    Orbit fromStateCci1 = Orbit.CreateFromStateCci(currentV.Parent, stateVectors.StateTime, stateVectors.PositionCci + double3_2 + test, stateVectors.VelocityCci, currentV.OrbitColor);
 
                     newVehicle.Teleport(fromStateCci1, new doubleQuat?(), new double3?());
 
@@ -59,7 +74,6 @@ namespace Space_Stations_and_Colonies
 
                     newVehicle.UpdatePerFrameData();
                     i++;
-                    Universe.CurrentSystem!.Vehicles.Register(newVehicle);
                     DefaultCategory.Log.Info($"Cloned Vehicle {currentV.Id}");
                 }
             }
